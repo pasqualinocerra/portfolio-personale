@@ -11,7 +11,7 @@ const Timeline = () => {
   return (
     <motion.section
       id="timeline"
-      className="relative py-24 bg-gradient-to-r from-indigo-900 via-blue-900 to-black dark:from-gray-200 dark:via-gray-300 dark:to-gray-100 overflow-x-auto"
+      className="relative py-24 bg-gradient-to-r from-indigo-900 via-blue-900 to-black dark:from-gray-200 dark:via-gray-300 dark:to-gray-100 overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -20,15 +20,21 @@ const Timeline = () => {
         La Mia Storia
       </h2>
 
-      <div className="relative flex space-x-24 max-w-full px-10 overflow-x-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-700 dark:scrollbar-track-gray-300">
-        
+      <div
+        className="
+          relative 
+          flex flex-wrap justify-center gap-x-12 gap-y-12 
+          max-w-full px-6 mx-auto 
+          overflow-visible
+        "
+      >
         {/* Linea orizzontale decorativa */}
         <div className="absolute top-28 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full opacity-70 z-0 shadow-lg"></div>
 
         {timeline.map((item, index) => (
           <motion.div
             key={index}
-            className="relative flex-shrink-0 w-80 cursor-default select-none"
+            className="relative flex-shrink-0 w-full max-w-xs cursor-default select-none"
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.8, delay: index * 0.3, ease: 'easeOut' }}

@@ -1,119 +1,133 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link as ScrollLink } from 'react-scroll'
 import { useTheme } from '../context/ThemeContext'
-import { FaBars, FaTimes, FaMoon, FaSun } from 'react-icons/fa'
+import { FaMoon, FaSun } from 'react-icons/fa'
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
 
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  const menuItems = (
-    <>
-      {['aboutMe', 'projects', 'contact'].map((section) => {
-        const label =
-          section === 'aboutMe'
-            ? 'Chi sono'
-            : section === 'projects'
-            ? 'Progetti'
-            : 'Contatti'
-        return (
-          <ScrollLink
-            key={section}
-            to={section}
-            smooth={true}
-            duration={500}
-            className="cursor-pointer relative text-white dark:text-gray-900 py-2 block hover:text-blue-500 dark:hover:text-blue-700 transition-colors focus:outline-none focus-visible:underline focus-visible:underline-offset-4"
-            onClick={() => setMenuOpen(false)}
-            activeClass="font-bold"
-            spy={true}
-          >
-            {label}
-            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-500 transition-all group-hover:w-full"></span>
-          </ScrollLink>
-        )
-      })}
-      <button
-        onClick={() => {
-          toggleTheme()
-          setMenuOpen(false)
-        }}
-        className="mt-2 px-5 py-1 rounded-full bg-blue-600 text-white dark:bg-blue-800 flex items-center gap-2 hover:bg-blue-700 dark:hover:bg-blue-900 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
-        aria-label="Toggle theme"
-      >
-        {theme === 'dark' ? (
-          <FaSun className="text-yellow-400" />
-        ) : (
-          <FaMoon className="text-gray-900" />
-        )}
-        <span className="font-semibold">{theme === 'dark' ? 'Light' : 'Dark'}</span>
-      </button>
-    </>
-  )
+  const menuItems = [
+    { id: 'aboutMe', label: 'Chi sono' },
+    { id: 'projects', label: 'Progetti' },
+    { id: 'contact', label: 'Contatti' },
+  ]
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-700 ease-in-out
-        ${
-          scrolled
-            ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg shadow-lg dark:bg-gray-100 dark:bg-opacity-70 dark:text-gray-900'
-            : 'bg-transparent'
-        }`}
-    >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center text-white dark:text-gray-900">
-        <div
-          className={`font-bold text-xl cursor-pointer select-none transition-shadow duration-300
-            ${
-              scrolled
-                ? 'drop-shadow-lg text-blue-400 dark:text-blue-700'
-                : 'text-white dark:text-gray-900'
-            }`}
-          aria-label="Logo Pasqualino Cerra"
-        >
-          Pasqualino Cerra
-        </div>
+    <nav className="bg-gray-900 dark:bg-gray-100 shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
 
-        {/* Desktop menu */}
-        <div className="hidden md:flex space-x-8 text-lg items-center">{menuItems}</div>
-
-        {/* Mobile menu button */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-            className="relative w-8 h-8 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+          {/* Logo */}
+          <a
+            href="#"
+            aria-label="Logo Pasqualino Cerra"
+            className="text-white dark:text-gray-900 font-extrabold text-2xl select-none hover:text-blue-500 dark:hover:text-blue-600 transition"
+            onClick={() => setMenuOpen(false)}
           >
-            <div
-              className={`absolute top-1/2 left-1/2 w-6 h-0.5 bg-white dark:bg-gray-900 rounded transition-transform duration-300
-                ${menuOpen ? 'rotate-45 translate-x-1.5 -translate-y-1.5' : '-translate-x-3 -translate-y-1.5'}`}
-            ></div>
-            <div
-              className={`absolute top-1/2 left-1/2 w-6 h-0.5 bg-white dark:bg-gray-900 rounded transition-opacity duration-300
-                ${menuOpen ? 'opacity-0' : 'opacity-100'}`}
-            ></div>
-            <div
-              className={`absolute top-1/2 left-1/2 w-6 h-0.5 bg-white dark:bg-gray-900 rounded transition-transform duration-300
-                ${menuOpen ? '-rotate-45 -translate-x-1.5 translate-y-1.5' : 'translate-x-3 translate-y-1.5'}`}
-            ></div>
-          </button>
-        </div>
-      </div>
+            Pasqualino Cerra
+          </a>
 
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden bg-gray-900 dark:bg-gray-100 dark:text-gray-900 px-6 py-4 space-y-4
-        transition-opacity duration-300 ease-in-out
-        ${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-      >
-        {menuItems}
+          {/* Desktop menu */}
+          <div className="hidden md:flex space-x-8 items-center">
+            {menuItems.map(({ id, label }) => (
+              <ScrollLink
+                key={id}
+                to={id}
+                smooth={true}
+                duration={500}
+                spy={true}
+                offset={-70}
+                className="text-gray-300 dark:text-gray-700 hover:text-white dark:hover:text-gray-900 font-medium cursor-pointer transition-colors px-3 py-2 rounded-md"
+                activeClass="text-white dark:text-gray-900 border-b-2 border-blue-500"
+              >
+                {label}
+              </ScrollLink>
+            ))}
+
+            {/* Theme Toggle */}
+            <button
+              onClick={() => toggleTheme()}
+              aria-label="Toggle theme"
+              className="ml-4 flex items-center gap-2 px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold transition focus:outline-none focus:ring-2 focus:ring-blue-400"
+              title={`Passa a ${theme === 'dark' ? 'Light Mode' : 'Dark Mode'}`}
+            >
+              {theme === 'dark' ? <FaSun size={18} /> : <FaMoon size={18} />}
+              <span className="hidden sm:inline">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+            </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 dark:hover:bg-gray-300 dark:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition"
+            >
+              {/* Hamburger icon */}
+              <svg
+                className={`${menuOpen ? 'hidden' : 'block'} h-6 w-6`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+              </svg>
+
+              {/* Close icon */}
+              <svg
+                className={`${menuOpen ? 'block' : 'hidden'} h-6 w-6`}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            menuOpen ? 'max-h-60 opacity-100 pt-2' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="flex flex-col space-y-1 pb-4">
+            {menuItems.map(({ id, label }) => (
+              <ScrollLink
+                key={id}
+                to={id}
+                smooth={true}
+                duration={500}
+                spy={true}
+                offset={-70}
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 rounded-md text-gray-300 dark:text-gray-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-700 dark:hover:text-white font-medium cursor-pointer transition"
+                activeClass="bg-blue-700 dark:bg-blue-800 text-white"
+              >
+                {label}
+              </ScrollLink>
+            ))}
+
+            <button
+              onClick={() => {
+                toggleTheme()
+                setMenuOpen(false)
+              }}
+              aria-label="Toggle theme"
+              className="mt-3 flex justify-center items-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 transition font-semibold"
+            >
+              {theme === 'dark' ? <FaSun size={18} /> : <FaMoon size={18} />}
+              {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
   )
