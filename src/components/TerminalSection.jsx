@@ -1,16 +1,24 @@
-import React, { useState } from 'react'
-import Terminal from 'react-terminal-ui'
+import React, { useState, useRef, useEffect } from 'react'
+import { FiSend } from 'react-icons/fi'
 
 const TerminalSection = () => {
-  const [terminalLineData, setTerminalLineData] = useState([
+  const [lines, setLines] = useState([
     { type: 'output', value: 'Benvenuto nel terminale! Digita "help" per iniziare.' }
   ])
+  const [input, setInput] = useState('')
+  const bottomRef = useRef(null)
 
-  const onInput = (input) => {
-    let newLines = [{ type: 'input', value: input }]
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [lines])
+
+  const handleInput = (e) => {
+    e.preventDefault()
+    const command = input.trim().toLowerCase()
+    if (!command) return
+
     let response = ''
-
-    switch (input.toLowerCase()) {
+    switch (command) {
       case 'about':
         response = '👨‍💻 Sono Pasqualino Cerra, sviluppatore frontend in evoluzione verso il full stack.'
         break
@@ -27,7 +35,8 @@ const TerminalSection = () => {
         response = '💡 Comandi disponibili: about, projects, contact, social, clear'
         break
       case 'clear':
-        setTerminalLineData([])
+        setLines([])
+        setInput('')
         return
       case 'sudo':
         response = '🔒 Permessi negati: Pasqualino ha già il pieno controllo del sistema 😎'
@@ -36,34 +45,78 @@ const TerminalSection = () => {
         response = '✨ Hai scoperto il comando segreto. Pasqualino è ovunque.'
         break
       default:
-        response = `❌ Comando "${input}" non riconosciuto. Digita "help" per la lista comandi.`
+        response = `❌ Comando "${command}" non riconosciuto. Digita "help" per la lista comandi.`
     }
 
-    newLines.push({ type: 'output', value: response })
-    setTerminalLineData([...terminalLineData, ...newLines])
+    setLines((prev) => [
+      ...prev,
+      { type: 'input', value: input },
+      { type: 'output', value: response },
+    ])
+    setInput('')
   }
 
   return (
-    <section className="relative px-4 py-20 md:py-28 bg-gradient-to-br from-black to-gray-900 text-green-400 font-mono flex flex-col items-center justify-center">
-      <div className="mb-8 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-lime-400 mb-2 tracking-wide">
-          Terminale Interattivo
-        </h2>
-        <p className="text-gray-400 text-sm md:text-base max-w-xl">
-          Prova a digitare un comando come <span className="text-lime-300 font-semibold">about</span>, <span className="text-lime-300 font-semibold">projects</span> o <span className="text-lime-300 font-semibold">social</span>.
-        </p>
-      </div>
+    <section className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 px-4">
+      <div className="w-full max-w-3xl bg-gray-800 bg-opacity-80 rounded-lg border border-gray-600 shadow-xl p-8 flex flex-col">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-center bg-gray-700 rounded-md py-2 shadow-inner text-gray-300 font-semibold tracking-wide select-none">
+          PortfolioCLI
+        </div>
 
-      <div className="w-full max-w-3xl bg-black rounded-xl border border-lime-500 shadow-[0_0_20px_rgba(132,204,22,0.5)] overflow-hidden">
-        <Terminal
-          name="PortfolioCLI"
-          height="400px"
-          onInput={onInput}
-          terminalLineData={terminalLineData}
-        />
+        {/* Output area */}
+        <div
+          className="flex-grow bg-gray-900 rounded-md p-6 overflow-y-auto shadow-inner max-h-[450px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
+          aria-live="polite"
+        >
+          {lines.length === 0 && (
+            <p className="text-gray-500 italic select-none">Il terminale è vuoto. Digita "help" per iniziare.</p>
+          )}
+
+          {lines.map((line, idx) => (
+            <pre
+              key={idx}
+              className={`whitespace-pre-wrap rounded px-3 py-1 mb-1 ${
+                line.type === 'input'
+                  ? 'text-lime-400 bg-gray-800 shadow-[inset_0_0_6px_#84cc16]'
+                  : 'text-green-300 bg-gray-900 shadow-[0_0_5px_#22c55e]'
+              }`}
+            >
+              {line.type === 'input' ? `> ${line.value}` : line.value}
+            </pre>
+          ))}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Input form */}
+        <form
+          onSubmit={handleInput}
+          className="mt-6 flex items-center gap-3 border border-gray-600 rounded-md bg-gray-800 px-4 py-2 shadow-inner focus-within:ring-2 focus-within:ring-lime-400"
+        >
+          <span className="text-lime-400 select-none animate-pulse mr-2">{'>'}</span>
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-grow bg-transparent text-lime-400 placeholder-lime-600 outline-none text-lg font-mono tracking-wide"
+            placeholder="Digita un comando..."
+            spellCheck={false}
+            autoComplete="off"
+            aria-label="Terminal input"
+            autoFocus
+          />
+          <button
+            type="submit"
+            aria-label="Invia comando"
+            className="text-gray-900 bg-lime-400 hover:bg-lime-500 transition px-4 py-2 rounded-md flex items-center justify-center shadow-lg"
+          >
+            <FiSend size={20} />
+          </button>
+        </form>
       </div>
     </section>
   )
 }
 
 export default TerminalSection
+
