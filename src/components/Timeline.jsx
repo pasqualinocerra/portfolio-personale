@@ -11,24 +11,36 @@ const Timeline = () => {
   return (
     <motion.section
       id="timeline"
-      className="p-8 md:p-16 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900"
+      className="relative py-24 bg-gradient-to-r from-indigo-900 via-blue-900 to-black dark:from-gray-200 dark:via-gray-300 dark:to-gray-100 overflow-x-auto"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 1 }}
     >
-      <h2 className="text-3xl font-bold mb-12 text-center text-blue-400 dark:text-blue-700">La Mia Storia</h2>
-      <div className="relative border-l-4 border-blue-500 dark:border-blue-700 max-w-xl mx-auto">
+      <h2 className="text-5xl font-extrabold text-center mb-20 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-xl">
+        La Mia Storia
+      </h2>
+
+      <div className="relative flex space-x-24 max-w-full px-10 overflow-x-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-700 dark:scrollbar-track-gray-300">
+        
+        {/* Linea orizzontale decorativa */}
+        <div className="absolute top-28 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full opacity-70 z-0 shadow-lg"></div>
+
         {timeline.map((item, index) => (
           <motion.div
             key={index}
-            className="mb-10 ml-6"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.2 }}
+            className="relative flex-shrink-0 w-80 cursor-default select-none"
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: index * 0.3, ease: 'easeOut' }}
+            viewport={{ once: true }}
           >
-            <div className="absolute w-4 h-4 bg-blue-500 dark:bg-blue-700 rounded-full -left-2 border-2 border-white dark:border-gray-900"></div>
-            <h3 className="text-xl font-semibold">{item.year}</h3>
-            <p className="mt-2 text-gray-300 dark:text-gray-700">{item.event}</p>
+            {/* Cerchio luminoso con alone neon */}
+            <span className="absolute -top-12 left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full bg-gradient-to-tr from-purple-400 to-pink-500 shadow-[0_0_25px_5px_rgba(139,92,246,0.6)] border-4 border-white z-10"></span>
+
+            <div className="relative bg-gray-900 dark:bg-white dark:text-gray-900 rounded-3xl px-8 py-10 shadow-2xl hover:shadow-[0_0_30px_#d6336c] transition-shadow duration-500 z-20">
+              <h3 className="text-3xl font-bold mb-4 text-white dark:text-gray-900 tracking-wide">{item.year}</h3>
+              <p className="text-gray-300 dark:text-gray-700 text-lg leading-relaxed">{item.event}</p>
+            </div>
           </motion.div>
         ))}
       </div>

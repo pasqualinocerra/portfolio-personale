@@ -4,7 +4,10 @@ import { FaLaptopCode, FaGraduationCap, FaRocket } from 'react-icons/fa'
 
 const AboutMe = () => {
   return (
-    <section id='aboutMe' className="max-w-5xl mx-auto px-6 py-20 text-center">
+    <section
+      id="aboutMe"
+      className="max-w-5xl mx-auto px-6 pt-32 pb-20 text-center"
+    >
       <motion.h2
         className="text-4xl md:text-5xl font-bold mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -68,7 +71,6 @@ const AboutMe = () => {
           </p>
         </motion.div>
       </div>
-
     </section>
   )
 }
