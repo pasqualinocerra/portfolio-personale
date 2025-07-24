@@ -1,0 +1,31 @@
+
+html {
+  scroll-behavior: smooth;
+}
+
+.glitch {
+  position: relative;
+}
+
+.glitch span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: glitch 1s infinite;
+  color: #0ff;
+  opacity: 0.7;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0,0); }
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
