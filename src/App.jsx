@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
@@ -14,18 +14,15 @@ import SecretToggleButton from './components/SecretToggleButton'
 import SecretModal from './components/SecretModal'
 import TerminalSection from './components/TerminalSection'
 import AboutMe from './components/AboutMe'
-
 import ThankYou from './pages/ThankYou'
 
 function MainApp() {
   const [entered, setEntered] = useState(false)
   const [showSecret, setShowSecret] = useState(false)
+  const [showTerminal, setShowTerminal] = useState(false)
 
-  // Gestione shortcut Ctrl+K per mostrare il modal segreto
-  // Se usi react-hotkeys-hook, importalo anche qui
-  // oppure puoi spostarlo nel componente WelcomeScreen o Navbar se preferisci
-  // Per semplicità mantengo solo qui:
-  React.useEffect(() => {
+  // Shortcut Ctrl+K per il modal segreto
+  useEffect(() => {
     function onKeyDown(e) {
       if (e.ctrlKey && e.key === 'k') {
         e.preventDefault()
@@ -51,12 +48,26 @@ function MainApp() {
         <Projects />
         <Testimonials />
         <Contact />
-        <TerminalSection />
+        {showTerminal && <TerminalSection />}
       </main>
       <Footer />
 
-      {/* Bottone visibile sempre */}
-      <SecretToggleButton onClick={() => setShowSecret(true)} />
+      {/* Bottone per Terminale */}
+      <button
+        onClick={() => setShowTerminal((prev) => !prev)}
+        className="fixed bottom-5 right-5 z-40 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-500 transition"
+      >
+        {showTerminal ? '💻 Chiudi Terminale' : '💻 Apri Terminale'}
+      </button>
+
+      {/* Bottone Segreto spostato più a sinistra */}
+      <button
+        onClick={() => setShowSecret(true)}
+        className="fixed bottom-20 right-5 z-40 bg-indigo-600 text-white font-semibold px-4 py-2 rounded-full shadow-lg hover:bg-indigo-500 transition"
+      >
+        🔒 Modalità segreta
+      </button>
+
       {showSecret && <SecretModal onClose={() => setShowSecret(false)} />}
     </>
   )
