@@ -26,8 +26,7 @@ const Projects = () => {
       icon: <FaLaptop size={32} className="text-yellow-400 drop-shadow-md" />,
       description: 'Landing page e UI moderne per esercizio.',
       tech: ['React', 'Tailwind', 'Bootstrap', 'Bulma', 'WordPress'],
-      private: false,
-      link: 'https://tuo-link-demo.vercel.app'
+      private: true 
     }
   ]
 
